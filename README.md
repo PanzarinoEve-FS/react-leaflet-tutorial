@@ -2,164 +2,142 @@
 
 Eve Panzarino (jhankins)
 
-1.4 Exercise 01: Library Tutorial
-
 Full Sail University
 
 Repo for React Leaflet Tutorial Assignment
 
 ---
 
-# MERN Stack App
+1.4 Exercise 01: Library Tutorial — [Click to watch video](https://fullsailedu-my.sharepoint.com/:v:/g/personal/jnhankins_student_fullsail_edu/IQBidfMZHvIQT43gJQyiedVsARpBz6SnAPKa3BTxSKI10Go?e=EZOFxK&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbE1vZGUiOiJtaXMiLCJyZWZlcnJhbFZpZXciOiJwb3N0cm9sbC1jb3B5bGluayIsInJlZmVycmFsUGxheWJhY2tTZXNzaW9uSWQiOiJiY2M5YTY3My1hOTQ3LTQwODItYWI0ZS02MTQwMGJhZTJjYTIifX0%3D)
 
-A full-stack starter on the MERN stack: **M**ongoDB, **E**xpress, **R**eact, **N**ode.
+React Leaflet: Library — [Click to go to their website with more documentation](https://react-leaflet.js.org).
 
-The backend is complete and working — a REST API for an "Item" resource (title, description,
-completed) backed by Mongoose and MongoDB. The frontend is the **default Vite + React starter
-page**, left clean so the UI can be built from scratch. The wiring between them is already in
-place: Vite proxies `/api` to Express, so a component can call `fetch('/api/items')` with no
-extra setup.
+I chose to use React Leaflet, as my first job was at my dad's company and I was the shipping and logistics supervisor and then tried to help my dad build this company's backend and we had a full chain of disposal in a recordkeeping system for compliance in medical waste disposal. I have a lot of experience trying to get leaflet maps to work a long time ago because of this. It is what introduced me to JSON.
 
-## Project structure
+Maps are something that connect us to the present moment because we go to them to find something we can do in the now. Maps are a very useful element to engage a user.
 
+Also, React Leaflet has a lot of cool synergies with the APIs I was looking into for my project.
+
+---
+
+## Script: Steps to setup Leaflet
+
+Hi I'm Eve Panzarino-Hankins. I chose the library Leaflet Maps.
+
+OpenStreetMap - Credited use
+
+With leaflet maps you can render maps with markers that when clicked popup with more information
+
+At the website, https://react-leaflet.js.org you are given this code block with an example of the map on the website:
+
+```jsx
+render(
+  <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+    <TileLayer
+      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    />
+    <Marker position={position}>
+      <Popup>
+        A pretty CSS3 popup. <br /> Easily customizable.
+      </Popup>
+    </Marker>
+  </MapContainer>
+)
 ```
-.
-├── package.json          # root scripts (runs client + server together)
-├── client/               # React frontend (Vite) — stock starter template
-│   ├── vite.config.js    # dev server + /api proxy to Express
-│   ├── index.html
-│   ├── public/vite.svg
-│   └── src/
-│       ├── main.jsx
-│       ├── App.jsx       # default Vite + React starter page
-│       ├── App.css
-│       ├── index.css
-│       └── assets/react.svg
-└── server/               # Express + Mongoose backend
-    ├── server.js         # app setup, middleware order, startup
-    ├── .env              # local config (gitignored)
-    ├── .env.example      # template to copy
-    ├── config/db.js      # MongoDB connection
-    ├── models/Item.js    # Mongoose schema
-    ├── controllers/itemController.js
-    ├── routes/itemRoutes.js
-    └── middleware/errorHandler.js
-```
 
-## Prerequisites
-
-- Node.js 20.19+ (built and tested on v24)
-- MongoDB running locally
-
-Start MongoDB if it isn't already running:
+Install Leaflet Node.js:
 
 ```bash
-brew services start mongodb-community
+npm install leaflet react-leaflet
 ```
 
-## Setup
+Import leaflet:
 
-Install dependencies for the root, server, and client in one step:
+```jsx
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import L from 'leaflet';
 
-```bash
-npm run install:all
+import 'leaflet/dist/leaflet.css';
 ```
 
-Then create your local server config:
+Import marker icons - these are the default, but can be changed
 
-```bash
-cp server/.env.example server/.env
+```jsx
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
+L.Marker.prototype.options.icon = L.icon({
+  iconUrl: markerIcon,
+  iconRetinaUrl: markerIcon2x,
+  shadowUrl: markerShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  shadowSize: [41, 41],
+  shadowAnchor: [13, 41],
+});
 ```
 
-## Running
+Set markers positions and information to be displayed
 
-From the repo root, start both the API and the frontend together:
+```jsx
+const markersPosition = [
+  { name: "Marker 1", address: "123 Main St", lat: 51.505, lng: -0.09 },
+  { name: "Marker 2", address: "456 Oak Ave", lat: 51.515, lng: -0.1 },
+  { name: "Marker 3", address: "789 Pine Rd", lat: 51.525, lng: -0.11 },
+]
 
-```bash
-npm run dev
+const mapPosition = [51.505, -0.09]
+
+export default function LeafletMap() {
+  return (
+    <MapContainer
+      center={mapPosition}
+      zoom={13}
+      scrollWheelZoom={false}
+      style={{ height: '500px', width: '100%' }}
+    >
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
 ```
 
-- Client: http://localhost:5174
-- API: http://localhost:4000
+You can also create markers and store different locations in json object that have popups
 
-To run just one side: `npm run server` or `npm run client`.
+Map marker's position onto the marker
 
-### A note on ports
-
-This project uses **4000** (API) and **5174** (client) rather than the more common 5000/5173.
-Port 5000 is claimed by AirPlay Receiver on macOS, and 5050/5173 are already in use by another
-project on this machine. The Vite config sets `strictPort: true` so the client fails loudly
-instead of silently drifting to a different port, and the server exits with a clear message if
-its port is taken. To change them, edit `PORT` in `server/.env`, the proxy target and `port` in
-`client/vite.config.js`, and `CLIENT_ORIGIN` in `server/.env` (used for CORS).
-
-## Environment variables (`server/.env`)
-
-| Variable        | Default                                | Purpose                          |
-| --------------- | -------------------------------------- | -------------------------------- |
-| `PORT`          | `4000`                                 | Port the Express server binds to |
-| `MONGO_URI`     | `mongodb://127.0.0.1:27017/mern_app`   | MongoDB connection string        |
-| `CLIENT_ORIGIN` | `http://localhost:5174`                | Allowed CORS origin              |
-
-To use MongoDB Atlas instead of a local database, replace `MONGO_URI` with your cluster's
-connection string.
-
-## API
-
-Base URL: `http://localhost:4000/api`
-
-| Method   | Endpoint      | Description               | Success |
-| -------- | ------------- | ------------------------- | ------- |
-| `GET`    | `/health`     | Server status and uptime  | 200     |
-| `GET`    | `/items`      | List all items, newest first | 200  |
-| `GET`    | `/items/:id`  | Get one item              | 200     |
-| `POST`   | `/items`      | Create an item            | 201     |
-| `PUT`    | `/items/:id`  | Update an item            | 200     |
-| `DELETE` | `/items/:id`  | Delete an item            | 200     |
-
-Request body for `POST` / `PUT`:
-
-```json
-{ "title": "Read the docs", "description": "Optional details", "completed": false }
+```jsx
+      {markersPosition.map((marker) => (
+        <Marker key={marker.name} position={[marker.lat, marker.lng]}>
+          <Popup>
+            {marker.name}<br /> {marker.address}
+          </Popup>
+        </Marker>
+      ))}
+    </MapContainer>
+  )
+}
 ```
 
-Errors return `{ "message": "..." }` with an appropriate status: `400` for validation
-failures, `404` for a missing item, an unknown route, or a malformed id.
+Import leaflet map component to App.jsx
 
-Example:
+```jsx
+import LeafletMap from './components/leaflet.jsx'
 
-```bash
-curl -X POST http://localhost:4000/api/items \
-  -H 'Content-Type: application/json' \
-  -d '{"title":"Read the docs"}'
+function App() {
+  return (
+    <>
+      <h1>React Leaflet</h1>
+      <LeafletMap />
+    </>
+  )
+}
 ```
 
-## How the pieces connect
+---
 
-The browser only ever talks to one origin in development. Vite serves the React app on 5174
-and proxies any request starting with `/api` to Express on 4000, so the frontend can call
-`fetch('/api/items')` with no host and no CORS preflight. Express is also configured with
-`cors` for `CLIENT_ORIGIN`, which matters if you ever call the API directly from the browser
-instead of through the proxy.
+For my application I am using an api to get the user's location from their ip address which gives the map a starting point to query the apis for data from
 
-The client currently makes no API calls — nothing in `src/` talks to the backend yet. To start
-using it, `fetch('/api/items')` from a component and the proxy handles the rest.
-
-On the server, `server.js` mounts JSON parsing, then the routes, then a 404 handler, then the
-error handler — order matters, since Express runs middleware top to bottom. Controllers use
-plain `async` functions and simply `throw` on failure: Express 5 forwards rejected promises to
-the error middleware automatically, so no `try/catch` or `express-async-handler` wrapper is
-needed. `middleware/errorHandler.js` translates Mongoose's `ValidationError` into a `400` and a
-bad `ObjectId` (`CastError`) into a `404`, and hides stack traces when `NODE_ENV=production`.
-
-## Building for production
-
-```bash
-npm run build
-```
-
-Outputs the optimized client to `client/dist/`.
-
-## Tech stack
-
-Express 5 · Mongoose 8 · React 19 · Vite 7
+Then on search the location updates to display new search results on the map.

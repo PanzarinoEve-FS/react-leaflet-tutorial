@@ -22,7 +22,9 @@ Also, React Leaflet has a lot of cool synergies with the APIs I was looking into
 
 ## Script: Steps to setup Leaflet
 
-Hi I'm Eve Panzarino-Hankins. I chose the library Leaflet Maps.
+Hi I'm Eve Panzarino-Hankins. 
+
+I chose the library Leaflet Maps.
 
 OpenStreetMap - Credited use
 
